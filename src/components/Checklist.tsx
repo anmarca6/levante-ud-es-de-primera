@@ -1,16 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { IdCard, Ticket, Battery, Bus, BatteryCharging, Droplets, Sun, Shield, Check } from 'lucide-react';
 
 const ITEMS = [
-  { id: 'dni', label: 'DNI / Pasaporte', icon: '🪪' },
-  { id: 'entrada', label: 'Entrada partido', icon: '🎟️' },
-  { id: 'pulsera', label: 'Bufanda', icon: '🧣' },
-  { id: 'justificante', label: 'Justificante bus / tren', icon: '🚌' },
-  { id: 'cargador', label: 'Cargador / batería externa', icon: '🔋' },
-  { id: 'agua', label: 'Agua (mínimo 1,5L)', icon: '💧' },
-  { id: 'gorra', label: 'Gorra / visera', icon: '🧢' },
-  { id: 'solar', label: 'Protector solar', icon: '🌞' },
+  { id: 'dni', label: 'DNI / Pasaporte', Icon: IdCard },
+  { id: 'entrada', label: 'Entrada partido', Icon: Ticket },
+  { id: 'bufanda', label: 'Bufanda granota', Icon: Shield },
+  { id: 'justificante', label: 'Justificante bus / tren', Icon: Bus },
+  { id: 'cargador', label: 'Cargador / batería externa', Icon: BatteryCharging },
+  { id: 'agua', label: 'Agua (mínimo 1,5 L)', Icon: Droplets },
+  { id: 'gorra', label: 'Gorra / visera', Icon: Sun },
+  { id: 'solar', label: 'Protector solar', Icon: Sun },
 ];
 
 const KEY = 'granotas_checklist';
@@ -34,38 +35,63 @@ export default function Checklist() {
   };
 
   const done = Object.values(checked).filter(Boolean).length;
+  const pct = Math.round((done / ITEMS.length) * 100);
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <p className="text-sm text-gray-400">{done}/{ITEMS.length} preparado</p>
-        <div className="h-2 flex-1 mx-4 rounded-full bg-white/10 overflow-hidden">
+      <div className="flex items-center gap-3 mb-5">
+        <span className="text-sm font-medium tabular-nums" style={{ color: 'var(--text-muted)', minWidth: 60 }}>
+          {done}/{ITEMS.length}
+        </span>
+        <div
+          className="flex-1 h-1.5 rounded-full overflow-hidden"
+          style={{ background: 'var(--surface-3)' }}
+        >
           <div
             className="h-full rounded-full transition-all duration-500"
-            style={{ width: `${(done / ITEMS.length) * 100}%`, background: '#8B1A2B' }}
+            style={{ width: `${pct}%`, background: done === ITEMS.length ? '#22c55e' : 'var(--granate)' }}
           />
         </div>
+        <span className="text-sm font-bold tabular-nums" style={{ color: done === ITEMS.length ? '#22c55e' : 'var(--granate-light)' }}>
+          {pct}%
+        </span>
       </div>
-      <ul className="space-y-3">
-        {ITEMS.map(({ id, label, icon }) => (
+
+      <ul className="space-y-2">
+        {ITEMS.map(({ id, label, Icon }) => (
           <li key={id}>
             <button
               onClick={() => toggle(id)}
-              className="w-full flex items-center gap-4 p-4 rounded-2xl transition-all text-left"
+              className="w-full flex items-center gap-3.5 py-3.5 px-4 rounded-xl transition-all text-left"
               style={{
-                background: checked[id] ? 'rgba(139,26,43,0.25)' : 'rgba(255,255,255,0.05)',
-                border: `1px solid ${checked[id] ? '#8B1A2B' : 'rgba(255,255,255,0.08)'}`,
+                background: checked[id] ? 'var(--granate-muted)' : 'var(--surface-2)',
+                border: `1px solid ${checked[id] ? 'var(--granate-border)' : 'var(--border)'}`,
               }}
             >
-              <span className="text-2xl">{icon}</span>
-              <span className={`flex-1 font-medium ${checked[id] ? 'line-through text-gray-500' : 'text-white'}`}>
+              <Icon
+                size={18}
+                strokeWidth={1.75}
+                style={{ color: checked[id] ? 'var(--granate-light)' : 'var(--text-muted)', flexShrink: 0 }}
+              />
+              <span
+                className="flex-1 font-medium text-sm"
+                style={{
+                  textDecoration: checked[id] ? 'line-through' : 'none',
+                  color: checked[id] ? 'var(--text-muted)' : 'var(--text-primary)',
+                }}
+              >
                 {label}
               </span>
               <span
-                className="w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all"
-                style={{ borderColor: checked[id] ? '#8B1A2B' : '#555', background: checked[id] ? '#8B1A2B' : 'transparent' }}
+                className="flex items-center justify-center rounded-full transition-all flex-shrink-0"
+                style={{
+                  width: 22,
+                  height: 22,
+                  border: `2px solid ${checked[id] ? 'var(--granate)' : 'var(--border-strong)'}`,
+                  background: checked[id] ? 'var(--granate)' : 'transparent',
+                }}
               >
-                {checked[id] && <span className="text-white text-xs">✓</span>}
+                {checked[id] && <Check size={12} strokeWidth={3} color="#fff" />}
               </span>
             </button>
           </li>

@@ -1,12 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { Bus, TrainFront, MapPin, Footprints, Clock } from 'lucide-react';
 
 const BUS_SCHEDULE = [
   { time: '06:00', event: 'Presentación en Estadi Ciutat de València' },
   { time: '06:45', event: 'Salida hacia Sevilla' },
   { time: '15:00', event: 'Llegada a Sevilla' },
-  { time: '21:00', event: '⚽ Partido — Real Betis vs Levante UD' },
+  { time: '21:00', event: 'Partido — Real Betis vs Levante UD', isMatch: true },
   { time: '00:30', event: 'Salida buses de vuelta desde estadio' },
   { time: '08:30', event: 'Llegada a Valencia' },
 ];
@@ -15,34 +16,52 @@ const TRAIN_SCHEDULE = [
   { time: '07:30', event: 'Check-in en Estación Joaquín Sorolla' },
   { time: '09:15', event: 'Salida AVE Charter' },
   { time: '13:35', event: 'Llegada a Sevilla Santa Justa' },
-  { time: '21:00', event: '⚽ Partido — Real Betis vs Levante UD' },
+  { time: '21:00', event: 'Partido — Real Betis vs Levante UD', isMatch: true },
   { time: '00:45', event: 'Salida AVE de vuelta' },
   { time: '04:30', event: 'Llegada a Valencia Joaquín Sorolla' },
 ];
 
-function Timeline({ items }: { items: { time: string; event: string }[] }) {
+function Timeline({ items }: { items: { time: string; event: string; isMatch?: boolean }[] }) {
   return (
-    <div className="relative pl-6">
-      <div className="absolute left-0 top-0 bottom-0 w-0.5" style={{ background: 'rgba(139,26,43,0.4)' }} />
-      <div className="space-y-6">
-        {items.map(({ time, event }, i) => {
-          const isMatch = event.includes('Partido');
-          return (
-            <div key={i} className="relative">
-              <div
-                className="absolute -left-6 top-1 w-3 h-3 rounded-full border-2 -translate-x-1"
-                style={{ background: isMatch ? '#8B1A2B' : '#1A2B5C', borderColor: isMatch ? '#8B1A2B' : '#3a5298' }}
-              />
-              <div
-                className={`rounded-2xl p-4 ${isMatch ? 'border' : ''}`}
-                style={isMatch ? { background: 'rgba(139,26,43,0.15)', borderColor: '#8B1A2B' } : { background: 'rgba(255,255,255,0.05)' }}
+    <div className="relative pl-8">
+      <div
+        className="absolute left-3 top-0 bottom-0 w-px"
+        style={{ background: 'linear-gradient(to bottom, transparent, var(--granate-border) 15%, var(--granate-border) 85%, transparent)' }}
+      />
+      <div className="space-y-3">
+        {items.map(({ time, event, isMatch }, i) => (
+          <div key={i} className="relative">
+            <div
+              className="absolute -left-5 top-3.5 w-2.5 h-2.5 rounded-full -translate-x-px"
+              style={{
+                background: isMatch ? 'var(--granate)' : 'var(--surface-3)',
+                border: `2px solid ${isMatch ? 'var(--granate-light)' : 'var(--border-strong)'}`,
+                boxShadow: isMatch ? '0 0 8px var(--granate)' : 'none',
+              }}
+            />
+            <div
+              className="rounded-xl p-3.5"
+              style={
+                isMatch
+                  ? { background: 'var(--granate-muted)', border: '1px solid var(--granate-border)' }
+                  : { background: 'var(--surface-2)', border: '1px solid var(--border)' }
+              }
+            >
+              <p
+                className="text-xs font-bold tracking-widest mb-0.5"
+                style={{ color: isMatch ? 'var(--granate-light)' : 'var(--text-muted)' }}
               >
-                <p className="text-xs font-bold tracking-widest mb-1" style={{ color: '#8B1A2B' }}>{time}</p>
-                <p className={`font-medium text-sm ${isMatch ? 'text-white' : 'text-gray-300'}`}>{event}</p>
-              </div>
+                {time}
+              </p>
+              <p
+                className="font-medium text-sm"
+                style={{ color: isMatch ? 'var(--text-primary)' : 'var(--text-secondary)' }}
+              >
+                {event}
+              </p>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -53,19 +72,26 @@ export default function TransportTabs() {
 
   return (
     <div>
-      <div className="flex rounded-2xl p-1 mb-6" style={{ background: 'rgba(255,255,255,0.05)' }}>
-        {(['bus', 'train'] as const).map((t) => (
+      <div
+        className="flex rounded-2xl p-1 mb-6 gap-1"
+        style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}
+      >
+        {([
+          { key: 'bus', label: 'Bus oficial', Icon: Bus },
+          { key: 'train', label: 'AVE Charter', Icon: TrainFront },
+        ] as const).map(({ key, label, Icon }) => (
           <button
-            key={t}
-            onClick={() => setTab(t)}
-            className="flex-1 py-3 rounded-xl font-bold text-sm transition-all"
+            key={key}
+            onClick={() => setTab(key)}
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all"
             style={
-              tab === t
-                ? { background: '#8B1A2B', color: '#fff' }
-                : { color: '#9ca3af' }
+              tab === key
+                ? { background: 'var(--granate)', color: '#fff' }
+                : { color: 'var(--text-muted)' }
             }
           >
-            {t === 'bus' ? '🚌 Bus' : '🚄 Tren Charter'}
+            <Icon size={15} strokeWidth={2.5} />
+            {label}
           </button>
         ))}
       </div>
@@ -73,16 +99,8 @@ export default function TransportTabs() {
       {tab === 'bus' && (
         <div>
           <div className="grid grid-cols-2 gap-3 mb-6">
-            <div className="rounded-2xl p-4" style={{ background: 'rgba(26,43,92,0.4)', border: '1px solid rgba(26,43,92,0.6)' }}>
-              <p className="text-xs text-gray-400 mb-1">Salida</p>
-              <p className="font-bold text-white">Estadi Ciutat de València</p>
-              <p className="text-2xl font-black mt-1" style={{ color: '#8B1A2B' }}>06:45</p>
-            </div>
-            <div className="rounded-2xl p-4" style={{ background: 'rgba(26,43,92,0.4)', border: '1px solid rgba(26,43,92,0.6)' }}>
-              <p className="text-xs text-gray-400 mb-1">Vuelta</p>
-              <p className="font-bold text-white">Desde Estadio</p>
-              <p className="text-2xl font-black mt-1" style={{ color: '#8B1A2B' }}>00:30</p>
-            </div>
+            <InfoCard label="Salida" title="Estadi Ciutat" time="06:45" />
+            <InfoCard label="Vuelta" title="Desde Estadio" time="00:30" />
           </div>
           <Timeline items={BUS_SCHEDULE} />
         </div>
@@ -91,20 +109,28 @@ export default function TransportTabs() {
       {tab === 'train' && (
         <div>
           <div className="grid grid-cols-2 gap-3 mb-6">
-            <div className="rounded-2xl p-4" style={{ background: 'rgba(26,43,92,0.4)', border: '1px solid rgba(26,43,92,0.6)' }}>
-              <p className="text-xs text-gray-400 mb-1">Check-in</p>
-              <p className="font-bold text-white">Joaquín Sorolla</p>
-              <p className="text-2xl font-black mt-1" style={{ color: '#8B1A2B' }}>07:30</p>
-            </div>
-            <div className="rounded-2xl p-4" style={{ background: 'rgba(26,43,92,0.4)', border: '1px solid rgba(26,43,92,0.6)' }}>
-              <p className="text-xs text-gray-400 mb-1">Vuelta AVE</p>
-              <p className="font-bold text-white">Desde Sta. Justa</p>
-              <p className="text-2xl font-black mt-1" style={{ color: '#8B1A2B' }}>00:45</p>
-            </div>
+            <InfoCard label="Check-in" title="Joaquín Sorolla" time="07:30" />
+            <InfoCard label="AVE vuelta" title="Sta. Justa" time="00:45" />
           </div>
           <Timeline items={TRAIN_SCHEDULE} />
         </div>
       )}
+    </div>
+  );
+}
+
+function InfoCard({ label, title, time }: { label: string; title: string; time: string }) {
+  return (
+    <div
+      className="rounded-2xl p-4"
+      style={{ background: 'var(--navy-muted)', border: '1px solid var(--navy-border)' }}
+    >
+      <div className="flex items-center gap-1.5 mb-2">
+        <Clock size={11} strokeWidth={2} style={{ color: 'var(--text-muted)' }} />
+        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{label}</p>
+      </div>
+      <p className="font-bold text-sm leading-tight" style={{ color: 'var(--text-primary)' }}>{title}</p>
+      <p className="text-2xl font-black mt-1.5 tabular-nums" style={{ color: 'var(--granate-light)' }}>{time}</p>
     </div>
   );
 }
