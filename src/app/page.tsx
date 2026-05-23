@@ -42,7 +42,7 @@ const QUICK_INFO = [
   { icon: '🏟️', label: 'Estadio', value: 'La Cartuja' },
   { icon: '🕘', label: 'Hora', value: '21:00h' },
   { icon: '⚠️', label: 'Temperatura', value: '37º máx', warn: true },
-  { icon: '📅', label: 'Fecha', value: '25 mayo 2026' },
+  { icon: '📅', label: 'Fecha', value: '23 mayo 2026' },
   { icon: '🚌', label: 'Transporte', value: 'Bus + AVE' },
 ];
 
@@ -140,7 +140,7 @@ export default function Home() {
           </h1>
 
           <p className="text-gray-400 mb-6 text-sm">
-            Domingo 25 de mayo · 21:00h · Estadio La Cartuja, Sevilla
+            Sábado 23 de mayo · 21:00h · Estadio La Cartuja, Sevilla
           </p>
 
           <div className="mb-8">
@@ -293,7 +293,7 @@ export default function Home() {
         >
           <p className="text-6xl mb-2">☀️</p>
           <p className="text-5xl font-black text-yellow-400">37°</p>
-          <p className="text-gray-400 text-sm mt-1">Temperatura máxima · domingo 25 mayo</p>
+          <p className="text-gray-400 text-sm mt-1">Temperatura máxima · sábado 23 mayo</p>
           <div className="flex justify-center gap-6 mt-4 text-sm">
             <div>
               <p className="text-gray-500 text-xs">Mín</p>
