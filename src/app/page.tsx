@@ -19,7 +19,6 @@ import {
   Siren,
   Phone,
   Hospital,
-  Info,
   Lightbulb,
   ExternalLink,
   TriangleAlert,
@@ -136,17 +135,6 @@ function Divider() {
 export default function Home() {
   return (
     <main className="min-h-screen" style={{ background: 'var(--bg)', color: 'var(--text-primary)' }}>
-
-      {/* DISCLAIMER BANNER */}
-      <div
-        className="w-full px-4 py-2.5 text-center"
-        style={{ background: 'rgba(155,29,46,0.08)', borderBottom: '1px solid var(--granate-border)' }}
-      >
-        <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-          <span className="font-bold" style={{ color: 'var(--granate-light)' }}>Pagina no oficial · </span>
-          Iniciativa voluntaria para ayudar al aficionado granota. Sin afiliacion con el Levante UD ni el Real Betis.
-        </p>
-      </div>
 
       {/* HERO */}
       <section
@@ -574,22 +562,6 @@ export default function Home() {
         <p className="text-xs mb-8" style={{ color: 'var(--text-muted)', opacity: 0.6 }}>
           Real Betis vs Levante UD · Estadio La Cartuja · Sevilla
         </p>
-
-        <div
-          className="max-w-sm mx-auto rounded-xl p-4 text-left"
-          style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Info size={13} strokeWidth={2} style={{ color: 'var(--text-muted)' }} />
-            <p className="text-xs font-bold" style={{ color: 'var(--text-muted)' }}>Aviso importante</p>
-          </div>
-          <p className="text-xs leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-            Esta web es una <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>iniciativa voluntaria y no oficial</span>, creada para ayudar al aficionado desplazado. No esta afiliada ni representa al Levante UD ni al Real Betis.
-          </p>
-          <p className="text-xs leading-relaxed mt-2" style={{ color: 'var(--text-secondary)' }}>
-            En caso de duda, consulta las <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>fuentes oficiales del club</span> o contacta con <span style={{ color: 'var(--text-primary)', fontWeight: 600 }}>Macho Llevant</span>.
-          </p>
-        </div>
       </footer>
 
       {/* STICKY CTA */}
